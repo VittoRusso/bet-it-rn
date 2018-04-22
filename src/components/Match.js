@@ -7,10 +7,6 @@ export default class Match extends React.PureComponent {
   }
 
   render() {
-    var flags = require("../../data/flags.json");
-    // var home_img = require(flags[this.props.home_team]);
-
-    var img = require("../../img/flags/Russia.png");
     return (
       <View style={styles.container}>
         <View style={styles.row_one}>
@@ -97,6 +93,6 @@ const styles = StyleSheet.create({
   },
   flag_image: {
     width: 40,
-    heigth: 40
+    height: 40
   }
 });

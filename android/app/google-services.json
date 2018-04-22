@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "67687994451",
+    "firebase_url": "https://bet-it-rn.firebaseio.com",
+    "project_id": "bet-it-rn",
+    "storage_bucket": "bet-it-rn.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:67687994451:android:d8f55fbf38de2532",
+        "android_client_info": {
+          "package_name": "com.betit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "67687994451-ttq7pm0uc2b3jpfstjr12hpbipoafa3h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZQHDYkrcL7KmWpet8Q0-RXDugbEi3R14"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

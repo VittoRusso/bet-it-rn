@@ -76,6 +76,13 @@ export default class AdminPanel extends Component {
     return matches;
   }
 
+  onWipeData() {
+    Alert.alert(
+      "Message from Google",
+      "Deleting collections from an Android client is not recommended."
+    );
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -95,6 +102,12 @@ export default class AdminPanel extends Component {
           onPress={this.onLoadData}
         >
           <Text style={styles.buttonText}> Load data</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.buttonContainer}
+          onPress={this.onWipeData}
+        >
+          <Text style={styles.buttonText}> Wipe data</Text>
         </TouchableOpacity>
       </View>
     );

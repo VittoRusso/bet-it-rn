@@ -1,15 +1,28 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Dimensions } from "react-native";
+import { View, Text, StyleSheet, Dimensions, Image } from "react-native";
 
 export default class Match extends React.PureComponent {
+  constructor(props) {
+    super(props);
+  }
+
   render() {
+    var flags = require("../../data/flags.json");
+    // var home_img = require(flags[this.props.home_team]);
+
+    var img = require("../../img/flags/Russia.png");
     return (
       <View style={styles.container}>
         <View style={styles.row_one}>
           <Text style={styles.date_text}>{this.props.date}</Text>
         </View>
         <View style={styles.row_one}>
-          <View style={styles.img_ph} />
+          <Image
+            style={styles.flag_image}
+            source={{
+              uri: this.props.home_img
+            }}
+          />
           <Text style={[styles.row_item, styles.left_align]} numberOfLines={1}>
             {this.props.home_team}
             {""}
@@ -26,7 +39,12 @@ export default class Match extends React.PureComponent {
             {this.props.away_team}
             {""}
           </Text>
-          <View style={styles.img_ph} />
+          <Image
+            style={styles.flag_image}
+            source={{
+              uri: this.props.away_img
+            }}
+          />
         </View>
       </View>
     );
@@ -35,7 +53,8 @@ export default class Match extends React.PureComponent {
 
 const styles = StyleSheet.create({
   row_one: {
-    flexDirection: "row"
+    flexDirection: "row",
+    alignItems: "center"
   },
   container: {
     flex: 1,
@@ -45,27 +64,29 @@ const styles = StyleSheet.create({
   },
   row_item: {
     flex: 1,
-    fontSize: 16
+    fontSize: 16,
+    marginHorizontal: 10
   },
   row_item_half: {
     flex: 0.5,
     fontSize: 16
   },
   left_align: {
-    textAlign: "left",
-    fontWeight: "bold"
+    textAlign: "left"
+    // fontWeight: "bold"
   },
   right_align: {
-    textAlign: "right",
-    fontWeight: "bold"
+    textAlign: "right"
+    // fontWeight: "bold"
   },
   center_align: {
-    textAlign: "center"
+    textAlign: "center",
+    fontWeight: "bold"
   },
   date_text: {
     fontSize: 14,
     fontStyle: "italic",
-    color: "#e74c3c",
+    color: "#c0392b",
     opacity: 0.75
   },
   img_ph: {
@@ -73,5 +94,9 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     margin: 2
+  },
+  flag_image: {
+    width: 40,
+    heigth: 40
   }
 });

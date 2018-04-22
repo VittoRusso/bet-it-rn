@@ -4,7 +4,8 @@ import {
   StyleSheet,
   Dimensions,
   TouchableOpacity,
-  Animated
+  Animated,
+  Image
 } from "react-native";
 import { TabViewAnimated, TabBar, SceneMap } from "react-native-tab-view";
 
@@ -83,7 +84,8 @@ export default class TabViewExample extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    alignItems: "center"
   },
   tabBar: {
     flexDirection: "row",

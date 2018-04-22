@@ -53,6 +53,8 @@ export default class AdminPanel extends Component {
   };
 
   sortMatches(matches, teams, stadiums) {
+    var flags = require("../../data/flags.json");
+
     for (index = 0, len = matches.length; index < len; ++index) {
       var currentMatch = matches[index];
       var newDateString = currentMatch.date.substring(0, 10).replace(/-/g, "/");
@@ -64,6 +66,8 @@ export default class AdminPanel extends Component {
         stadiums[currentMatch.stadium - 1].name +
         " ," +
         stadiums[currentMatch.stadium - 1].city;
+      currentMatch["home_img"] = flags[currentMatch.home_team];
+      currentMatch["away_img"] = flags[currentMatch.away_team];
       matches[index] = currentMatch;
     }
     matches.sort(function(a, b) {

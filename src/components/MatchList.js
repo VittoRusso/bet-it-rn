@@ -76,8 +76,7 @@ export default class MatchList extends React.PureComponent {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#ecf0f1",
-    paddingTop: 8
+    flex: 1
+    // backgroundColor: "#ecf0f1",
   }
 });

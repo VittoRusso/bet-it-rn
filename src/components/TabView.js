@@ -35,33 +35,39 @@ export default class TabViewExample extends React.Component {
 
   _handleIndexChange = index => this.setState({ index });
 
-  // _renderHeader = props => <TabBar {...props} />;
+  _renderHeader = props => (
+    <TabBar
+      {...props}
+      style={styles.tabBarMe}
+      indicatorStyle={styles.indicatorStyle}
+    />
+  );
 
-  _renderHeader = props => {
-    const inputRange = props.navigationState.routes.map((x, i) => i);
-    //Se genera un boton por cada ruta
-    return (
-      <View style={styles.tabBar}>
-        {props.navigationState.routes.map((route, i) => {
-          const color = props.position.interpolate({
-            inputRange,
-            outputRange: inputRange.map(
-              inputIndex => (inputIndex === i ? "#c0392b" : "#222")
-            )
-          });
-          return (
-            <TouchableOpacity
-              style={styles.tabItem}
-              onPress={() => this.setState({ index: i })}
-              key={route.title}
-            >
-              <Animated.Text style={{ color }}>{route.title}</Animated.Text>
-            </TouchableOpacity>
-          );
-        })}
-      </View>
-    );
-  };
+  // _renderHeader = props => {
+  //   const inputRange = props.navigationState.routes.map((x, i) => i);
+  //   //Se genera un boton por cada ruta
+  //   return (
+  //     <View style={styles.tabBar}>
+  //       {props.navigationState.routes.map((route, i) => {
+  //         const color = props.position.interpolate({
+  //           inputRange,
+  //           outputRange: inputRange.map(
+  //             inputIndex => (inputIndex === i ? "#c0392b" : "#222")
+  //           )
+  //         });
+  //         return (
+  //           <TouchableOpacity
+  //             style={styles.tabItem}
+  //             onPress={() => this.setState({ index: i })}
+  //             key={route.title}
+  //           >
+  //             <Animated.Text style={{ color }}>{route.title}</Animated.Text>
+  //           </TouchableOpacity>
+  //         );
+  //       })}
+  //     </View>
+  //   );
+  // };
 
   _renderScene = SceneMap({
     first: FirstRoute,
@@ -89,11 +95,19 @@ const styles = StyleSheet.create({
   },
   tabBar: {
     flexDirection: "row",
-    paddingTop: 0
+    paddingTop: 0,
+    backgroundColor: "#ecf0f1"
   },
   tabItem: {
     flex: 1,
     alignItems: "center",
     padding: 16
+  },
+  tabBarMe: {
+    backgroundColor: "#c0392b"
+  },
+  indicatorStyle: {
+    backgroundColor: "#3498db"
+    // backgroundColor: "#c0392b"
   }
 });

@@ -1,48 +1,65 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Dimensions, Image } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  Image,
+  TouchableNativeFeedback,
+  Alert
+} from "react-native";
 
 export default class Match extends React.PureComponent {
   constructor(props) {
     super(props);
   }
-
+  onPress = () => {
+    Alert.alert(
+      "You have pressed on the match:",
+      this.props.home_team + " vs " + this.props.away_team
+    );
+  };
   render() {
     return (
-      <View style={styles.container}>
-        <View style={styles.row_one}>
-          <Text style={styles.date_text}>{this.props.date}</Text>
+      <TouchableNativeFeedback onPress={this.onPress}>
+        <View style={styles.container}>
+          <View style={styles.row_one}>
+            <Text style={styles.date_text}> {this.props.date} </Text>
+          </View>
+          <View style={styles.row_one}>
+            <Image
+              style={styles.flag_image}
+              source={{
+                uri: this.props.home_img
+              }}
+            />
+            <Text
+              style={[styles.row_item, styles.left_align]}
+              numberOfLines={1}
+            >
+              {this.props.home_team}
+            </Text>
+            <Text style={[styles.row_item_half, styles.center_align]}>
+              {this.props.home_score ? this.props.home_score : "-"}
+            </Text>
+            <Text style={[styles.row_item_half, styles.center_align]}>
+              {this.props.away_score ? this.props.away_score : "-"}
+            </Text>
+            <Text
+              style={[styles.row_item, styles.right_align]}
+              numberOfLines={1}
+            >
+              {this.props.away_team}
+            </Text>
+            <Image
+              style={styles.flag_image}
+              source={{
+                uri: this.props.away_img
+              }}
+            />
+          </View>
         </View>
-        <View style={styles.row_one}>
-          <Image
-            style={styles.flag_image}
-            source={{
-              uri: this.props.home_img
-            }}
-          />
-          <Text style={[styles.row_item, styles.left_align]} numberOfLines={1}>
-            {this.props.home_team}
-            {""}
-          </Text>
-          <Text style={[styles.row_item_half, styles.center_align]}>
-            {this.props.home_score ? this.props.home_score : "-"}
-            {""}
-          </Text>
-          <Text style={[styles.row_item_half, styles.center_align]}>
-            {this.props.away_score ? this.props.away_score : "-"}
-            {""}
-          </Text>
-          <Text style={[styles.row_item, styles.right_align]} numberOfLines={1}>
-            {this.props.away_team}
-            {""}
-          </Text>
-          <Image
-            style={styles.flag_image}
-            source={{
-              uri: this.props.away_img
-            }}
-          />
-        </View>
-      </View>
+      </TouchableNativeFeedback>
     );
   }
 }
@@ -54,9 +71,9 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    height: 88,
-    paddingVertical: 20,
-    paddingHorizontal: 16
+    height: 72,
+    paddingHorizontal: 16,
+    justifyContent: "center"
   },
   row_item: {
     flex: 1,

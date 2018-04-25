@@ -56,8 +56,8 @@ export default class MatchList extends React.PureComponent {
   render() {
     if (this.state.loading) {
       return (
-        <View style={styles.container}>
-          <Text> LOADING... </Text>
+        <View style={styles.loading}>
+          <Text style={{ fontSize: 24 }}> LOADING... </Text>
         </View>
       );
     }
@@ -78,5 +78,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1
     // backgroundColor: "#ecf0f1",
+  },
+  loading: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center"
   }
 });

@@ -24,9 +24,6 @@ export default class Match extends React.PureComponent {
       <TouchableNativeFeedback onPress={this.onPress}>
         <View style={styles.container}>
           <View style={styles.row_one}>
-            <Text style={styles.date_text}> {this.props.date} </Text>
-          </View>
-          <View style={styles.row_one}>
             <Image
               style={styles.flag_image}
               source={{
@@ -95,12 +92,6 @@ const styles = StyleSheet.create({
   center_align: {
     textAlign: "center",
     fontWeight: "bold"
-  },
-  date_text: {
-    fontSize: 14,
-    fontStyle: "italic",
-    color: "#c0392b",
-    opacity: 0.75
   },
   img_ph: {
     backgroundColor: "#000000",

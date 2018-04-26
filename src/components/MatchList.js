@@ -1,8 +1,10 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, FlatList, SectionList } from "react-native";
+import { View, Text, StyleSheet, SectionList, Alert } from "react-native";
 import firebase from "react-native-firebase";
 
 import Match from "./Match";
+
+import BetActivity from "./BetActivity";
 
 export default class MatchList extends React.PureComponent {
   constructor(props) {
@@ -50,7 +52,10 @@ export default class MatchList extends React.PureComponent {
     });
   };
 
-  _keyExtractor = (item, index) => item.id;
+  OpenPlaceBetActivity(rowData) {
+    // this.props.navigation.navigate("Second", { MatchHolder: rowData });
+    Alert.alert(rowData.date, rowData.home_team);
+  }
 
   _renderSeparator = () => {
     return <View style={styles.separator} />;
@@ -60,23 +65,23 @@ export default class MatchList extends React.PureComponent {
     if (this.state.loading) {
       return (
         <View style={styles.loading}>
-          <Text
-            style={{
-              fontSize: 24
-            }}
-          >
-            LOADING...
-          </Text>
+          <Text style={styles.loading_text}> LOADING...</Text>
         </View>
       );
     }
     return (
       <View style={styles.container}>
         <SectionList
-          renderItem={({ item }) => <Match {...item} />}
+          //Encapsulated the item as a prop for the Match component
+          renderItem={({ item }) => (
+            <Match item={item} onPressItem={this.OpenPlaceBetActivity} />
+          )}
           renderSectionHeader={({ section: { title } }) => (
             <Text style={styles.section_header}>{title}</Text>
           )}
+          //Each section is a Javascript object with a group title and a list of matches as data
+          //The map function takes an array (groups) and generates another from it (sections)
+          //Filter takes an array and a condition and returns a subarray of items that fulfill the condition
           sections={this.state.groups.map(x => {
             return {
               title: x,
@@ -114,6 +119,9 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: "#CED0CE",
     marginHorizontal: 16
+  },
+  loading_text: {
+    fontSize: 24
   }
 });
 

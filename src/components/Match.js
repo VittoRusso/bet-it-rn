@@ -5,7 +5,7 @@ import {
   StyleSheet,
   Dimensions,
   Image,
-  TouchableNativeFeedback,
+  TouchableOpacity,
   Alert
 } from "react-native";
 
@@ -14,49 +14,46 @@ export default class Match extends React.PureComponent {
     super(props);
   }
   onPress = () => {
-    Alert.alert(
-      "You have pressed on the match:",
-      this.props.home_team + " vs " + this.props.away_team
-    );
+    this.props.onPressItem(this.props.item);
   };
   render() {
     return (
-      <TouchableNativeFeedback onPress={this.onPress}>
+      <TouchableOpacity onPress={this.onPress}>
         <View style={styles.container}>
           <View style={styles.row_one}>
             <Image
               style={styles.flag_image}
               source={{
-                uri: this.props.home_img
+                uri: this.props.item.home_img
               }}
             />
             <Text
               style={[styles.row_item, styles.left_align]}
               numberOfLines={1}
             >
-              {this.props.home_team}
+              {this.props.item.home_team}
             </Text>
             <Text style={[styles.row_item_half, styles.center_align]}>
-              {this.props.home_score ? this.props.home_score : "-"}
+              {this.props.item.home_score ? this.props.item.home_score : "-"}
             </Text>
             <Text style={[styles.row_item_half, styles.center_align]}>
-              {this.props.away_score ? this.props.away_score : "-"}
+              {this.props.item.away_score ? this.props.item.away_score : "-"}
             </Text>
             <Text
               style={[styles.row_item, styles.right_align]}
               numberOfLines={1}
             >
-              {this.props.away_team}
+              {this.props.item.away_team}
             </Text>
             <Image
               style={styles.flag_image}
               source={{
-                uri: this.props.away_img
+                uri: this.props.item.away_img
               }}
             />
           </View>
         </View>
-      </TouchableNativeFeedback>
+      </TouchableOpacity>
     );
   }
 }

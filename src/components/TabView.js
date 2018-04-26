@@ -43,32 +43,6 @@ export default class TabViewExample extends React.Component {
     />
   );
 
-  // _renderHeader = props => {
-  //   const inputRange = props.navigationState.routes.map((x, i) => i);
-  //   //Se genera un boton por cada ruta
-  //   return (
-  //     <View style={styles.tabBar}>
-  //       {props.navigationState.routes.map((route, i) => {
-  //         const color = props.position.interpolate({
-  //           inputRange,
-  //           outputRange: inputRange.map(
-  //             inputIndex => (inputIndex === i ? "#c0392b" : "#222")
-  //           )
-  //         });
-  //         return (
-  //           <TouchableOpacity
-  //             style={styles.tabItem}
-  //             onPress={() => this.setState({ index: i })}
-  //             key={route.title}
-  //           >
-  //             <Animated.Text style={{ color }}>{route.title}</Animated.Text>
-  //           </TouchableOpacity>
-  //         );
-  //       })}
-  //     </View>
-  //   );
-  // };
-
   _renderScene = SceneMap({
     first: FirstRoute,
     second: SecondRoute,

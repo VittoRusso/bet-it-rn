@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, SectionList, Alert } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  SectionList,
+  Alert,
+  Dimensions
+} from "react-native";
 import firebase from "react-native-firebase";
 
 import Match from "./Match";
@@ -109,14 +116,15 @@ const styles = StyleSheet.create({
   section_header: {
     fontStyle: "italic",
     fontSize: 16,
-    color: "#c0392b",
-    opacity: 0.75,
+    fontWeight: "bold",
+    color: "#3498db",
+    opacity: 1,
     paddingHorizontal: 16,
     paddingTop: 8
   },
   separator: {
     height: 1,
-    width: "100%",
+    width: Dimensions.get("window").width - 32,
     backgroundColor: "#CED0CE",
     marginHorizontal: 16
   },

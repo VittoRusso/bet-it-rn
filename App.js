@@ -5,7 +5,14 @@
  */
 
 import React, { Component } from "react";
-import { Platform, StyleSheet, Text, View, Button } from "react-native";
+import {
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  StatusBar
+} from "react-native";
 import firebase from "react-native-firebase";
 import Login from "./src/components/Login";
 import { Tabs } from "./src/components/Router";
@@ -38,7 +45,10 @@ export default class App extends Component<Props> {
 
     return (
       //Tab Navigator y chaolin
-      <Tabs />
+      <View style={{ flex: 1 }}>
+        <StatusBar backgroundColor="#902b20" barStyle="light-content" />
+        <Tabs />
+      </View>
     );
   }
 }

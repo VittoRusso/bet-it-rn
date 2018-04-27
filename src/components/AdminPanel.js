@@ -117,12 +117,12 @@ export default class AdminPanel extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#e74c3c",
+    // backgroundColor: "white",
     alignItems: "center",
     justifyContent: "center"
   },
   buttonContainer: {
-    backgroundColor: "#c0392b",
+    backgroundColor: "rgba(0,0,0,0.25)",
     paddingVertical: 10,
     width: Dimensions.get("window").width - 40,
     marginTop: 20

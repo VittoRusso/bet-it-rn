@@ -4,31 +4,24 @@
  * @flow
  */
 
-import React, { Component } from 'react';
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-  Button
-} from 'react-native';
-import firebase from 'react-native-firebase';
-import Login from './src/components/Login'
-import Home from './src/components/Home'
-
-
+import React, { Component } from "react";
+import { Platform, StyleSheet, Text, View, Button } from "react-native";
+import firebase from "react-native-firebase";
+import Login from "./src/components/Login";
+import Home from "./src/components/Home";
+import TabView from "./src/components/TabView";
 
 type Props = {};
 export default class App extends Component<Props> {
-  constructor(Props){
+  constructor(Props) {
     super(Props);
     this.state = {
-      user: null, 
+      user: null
     };
   }
 
   componentDidMount() {
-    this.unsubscriber = firebase.auth().onAuthStateChanged((user) => {
+    this.unsubscriber = firebase.auth().onAuthStateChanged(user => {
       this.setState({ user });
     });
   }
@@ -39,14 +32,14 @@ export default class App extends Component<Props> {
     }
   }
 
-
   render() {
-    if (!this.state.user){
+    if (!this.state.user) {
       return <Login />;
     }
 
     return (
-     <Home user = {this.state.user}/>
+      //Tab Navigator y chaolin
+      <TabView />
     );
   }
 }
@@ -54,18 +47,18 @@ export default class App extends Component<Props> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#F5FCFF"
   },
   welcome: {
     fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
+    textAlign: "center",
+    margin: 10
   },
   instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+    textAlign: "center",
+    color: "#333333",
+    marginBottom: 5
+  }
 });

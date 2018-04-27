@@ -8,8 +8,7 @@ import React, { Component } from "react";
 import { Platform, StyleSheet, Text, View, Button } from "react-native";
 import firebase from "react-native-firebase";
 import Login from "./src/components/Login";
-import Home from "./src/components/Home";
-import TabView from "./src/components/TabView";
+import { Tabs } from "./src/components/Router";
 
 type Props = {};
 export default class App extends Component<Props> {
@@ -39,7 +38,7 @@ export default class App extends Component<Props> {
 
     return (
       //Tab Navigator y chaolin
-      <TabView />
+      <Tabs />
     );
   }
 }

@@ -23,6 +23,8 @@ export default class MatchList extends React.PureComponent {
       matches: [],
       groups: []
     };
+    //Explicit binding the method to THIS SPECIFIC CLASS and not where is called (Match.js)
+    this.OpenPlaceBetActivity = this.OpenPlaceBetActivity.bind(this);
   }
 
   componentDidMount() {
@@ -60,8 +62,7 @@ export default class MatchList extends React.PureComponent {
   };
 
   OpenPlaceBetActivity(rowData) {
-    // this.props.navigation.navigate("Second", { MatchHolder: rowData });
-    Alert.alert(rowData.date, rowData.home_team);
+    this.props.navigation.navigate("BetActivity", rowData);
   }
 
   _renderSeparator = () => {

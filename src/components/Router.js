@@ -1,20 +1,42 @@
 import React from "react";
-import { TabNavigator } from "react-navigation";
+import { TabNavigator, StackNavigator } from "react-navigation";
 import { Dimensions } from "react-native";
 
 import MatchList from "./MatchList";
 import AdminPanel from "./AdminPanel";
+import BetActivity from "./BetActivity";
+
+export const MatchesStack = StackNavigator(
+  {
+    MatchList: {
+      screen: MatchList
+    },
+    BetActivity: {
+      screen: BetActivity
+    }
+  },
+  {
+    headerMode: "none"
+  }
+);
 
 export const Tabs = TabNavigator(
   {
     Matches: {
-      screen: MatchList
+      screen: MatchesStack,
+      navigationOptions: {
+        tabBarLabel: "Matches"
+      }
     },
     Panel: {
-      screen: AdminPanel
+      screen: AdminPanel,
+      navigationOptions: {
+        tabBarLabel: "Panel"
+      }
     }
   },
   {
+    //Icons to be implemented
     tabBarOptions: {
       style: {
         backgroundColor: "#c0392b"

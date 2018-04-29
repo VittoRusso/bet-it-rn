@@ -61,8 +61,8 @@ export default class componentName extends Component {
   };
 
   _placeBet = () => {
-    this.state.match.home_score = this.state.home_score;
-    this.state.match.away_score = this.state.away_score;
+    this.state.match.home_result = this.state.home_score;
+    this.state.match.away_result = this.state.away_score;
     this.ref.add(this.state.match).catch(err => {
       console.log(err);
     });

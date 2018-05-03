@@ -16,11 +16,14 @@ export default class BetActivity extends Component {
   constructor(props) {
     super(props);
     this.ref = firebase.firestore().collection("Bets");
+    this.ref2 = firebase.firestore().collection("Users");
+    this.results_ref = firebase.firestore().collection("Results");
     this.state = {
       match: this.props.navigation.state.params,
       home_score: 0,
       away_score: 0,
-      user: null
+      user: null,
+      isAdmin: false
     };
   }
 
@@ -65,6 +68,20 @@ export default class BetActivity extends Component {
   componentDidMount() {
     this.unsubscriber = firebase.auth().onAuthStateChanged(user => {
       this.setState({ user });
+      var adminQuery = this.ref2.where("email", "==", user.email);
+      //This implements admin super powers
+      adminQuery
+        .get()
+        .then(querySnapshot => {
+          querySnapshot.forEach(doc => {
+            this.setState({
+              isAdmin: doc.data().isAdmin
+            });
+          });
+        })
+        .catch(err => {
+          console.log(err);
+        });
     });
   }
 
@@ -87,11 +104,34 @@ export default class BetActivity extends Component {
     this.props.navigation.pop();
   };
 
+  _placeResult = () => {
+    var result = this.state.match;
+    result.home_result = this.state.home_score;
+    result.away_result = this.state.away_score;
+    //This is dumb but will result useful
+    result.isResult = true;
+    this.results_ref.add(result).catch(err => {
+      console.log(err);
+    });
+    ToastAndroid.show("Result Placed", ToastAndroid.SHORT);
+    this.props.navigation.pop();
+  };
+
   _goBack = () => {
     this.props.navigation.pop();
   };
 
   render() {
+    const placeBetButton = (
+      <TouchableOpacity
+        style={styles.button}
+        onPress={this.state.isAdmin ? this._placeResult : this._placeBet}
+      >
+        <Text style={styles.button_text2}>
+          {this.state.isAdmin ? "SET RESULT" : "PLACE BET"}
+        </Text>
+      </TouchableOpacity>
+    );
     return (
       <View style={styles.container}>
         <View style={styles.container}>
@@ -141,11 +181,7 @@ export default class BetActivity extends Component {
 
           <Text style={styles.title}> {this.state.match.stadium} </Text>
 
-          <View style={styles.row}>
-            <TouchableOpacity style={styles.button} onPress={this._placeBet}>
-              <Text style={styles.button_text2}>PLACE BET</Text>
-            </TouchableOpacity>
-          </View>
+          <View style={styles.row}>{placeBetButton}</View>
 
           <View style={styles.row}>
             <TouchableOpacity style={styles.button} onPress={this._goBack}>

@@ -1,109 +1,127 @@
-import React, { Component } from 'react';
-import {  View, Text, TextInput, StyleSheet, TouchableOpacity, StatusBar, Alert } from 'react-native';
+import React, { Component } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+  StatusBar,
+  Alert
+} from "react-native";
 
-import firebase from 'react-native-firebase';
+import firebase from "react-native-firebase";
 
 export default class LoginForm extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
+    this.ref = firebase.firestore().collection("Users");
     this.state = {
-      email: '',
-      pwd: '',
-    }
+      email: "",
+      pwd: ""
+    };
   }
-  
-  onLogin = () => {
-    const {email, pwd} = this.state;
-    firebase.auth().signInWithEmailAndPassword(email,pwd)
-      .then((user)=> {
 
-      })
-      .catch((error)=> {
-        const{code, msg} = error;
-        Alert.alert('Error '+code, msg);
-      })
-  }
+  onLogin = () => {
+    const { email, pwd } = this.state;
+    firebase
+      .auth()
+      .signInAndRetrieveDataWithEmailAndPassword(email, pwd)
+      .then(userCredential => {})
+      .catch(error => {
+        const { code, msg } = error;
+        Alert.alert("Error " + code, msg);
+      });
+  };
 
   onRegister = () => {
-    const {email, pwd} = this.state;
-    firebase.auth().createUserWithEmailAndPassword(email,pwd)
-      .then((user) => {
-
+    const { email, pwd } = this.state;
+    firebase
+      .auth()
+      .createUserAndRetrieveDataWithEmailAndPassword(email, pwd)
+      .then(userCredential => {
+        this.ref
+          .add({
+            email: userCredential.user.email,
+            //Para hacerse admin hay que hacerlo desde la DB (console.firestore.blablabla)
+            isAdmin: false
+          })
+          .catch(err => {
+            console.log(err);
+          });
       })
-      .catch((error)=> {
-        const{code, msg} = error;
-        Alert.alert('Error '+code,code+" "+ msg);
-      })
-  }
-
+      .catch(error => {
+        const { code, msg } = error;
+        Alert.alert("Error " + code, code + " " + msg);
+      });
+  };
 
   render() {
     return (
-      <View style = {styles.container}>
-      <StatusBar 
-        barStyle = 'light-content'
+      <View style={styles.container}>
+        <StatusBar barStyle="light-content" />
+        <TextInput
+          style={styles.input}
+          placeholder="email"
+          placeholderTextColor="rgba(255,255,255,0.7)"
+          underlineColorAndroid={"rgba(255,255,255,0)"}
+          selectionColor={"#c0392b"}
+          onSubmitEditing={() => this.passwordInput.focus()}
+          keyboardType="email-address"
+          autoCapitalize="none"
+          onChangeText={text =>
+            this.setState({
+              email: text
+            })
+          }
         />
-        <TextInput  style = {styles.input} 
-                    placeholder = "email"
-                    placeholderTextColor = "rgba(255,255,255,0.7)"
-                    underlineColorAndroid = {'rgba(255,255,255,0)'}
-                    selectionColor = {'#c0392b'}
-                    onSubmitEditing = {()=> this.passwordInput.focus()}
-                    keyboardType = 'email-address'
-                    autoCapitalize = 'none'
-                    onChangeText = {(text) => this.setState({
-                      email: text
-                    })}
-                    />
-        <TextInput  style = {styles.input} 
-                    placeholder = 'password'
-                    placeholderTextColor = "rgba(255,255,255,0.7)"
-                    underlineColorAndroid = {'rgba(255,255,255,0)'}
-                    ref = {(input)=> this.passwordInput = input}
-                    selectionColor = {'#c0392b'}
-                    secureTextEntry
-                    onChangeText = {(text) => this.setState({
-                      pwd:text
-                    })}/>
-        <TouchableOpacity 
-        style = {styles.buttonContainer}
-        onPress = {this.onLogin}>
-          <Text style = {styles.buttonText}>LOGIN</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="password"
+          placeholderTextColor="rgba(255,255,255,0.7)"
+          underlineColorAndroid={"rgba(255,255,255,0)"}
+          ref={input => (this.passwordInput = input)}
+          selectionColor={"#c0392b"}
+          secureTextEntry
+          onChangeText={text =>
+            this.setState({
+              pwd: text
+            })
+          }
+        />
+        <TouchableOpacity style={styles.buttonContainer} onPress={this.onLogin}>
+          <Text style={styles.buttonText}>LOGIN</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity 
-        style = {styles.buttonContainer}
-        onPress = {this.onRegister}>
-          <Text style = {styles.buttonText}>REGISTER</Text>
+        <TouchableOpacity
+          style={styles.buttonContainer}
+          onPress={this.onRegister}
+        >
+          <Text style={styles.buttonText}>REGISTER</Text>
         </TouchableOpacity>
-        
       </View>
     );
   }
 }
 
-
-
 const styles = StyleSheet.create({
-    container: {
-      padding: 20
-    },
-    input: {
-        height: 40,
-        backgroundColor: 'rgba(255,255,255,0.2)',
-        marginBottom: 10,
-        color: "#FFF",
-        paddingHorizontal: 10,
-    },
-    buttonContainer: {
-      backgroundColor: '#c0392b',
-      paddingVertical: 10,
-      marginBottom: 10
-    },
-    buttonText: {
-      textAlign: 'center',
-      color: '#FFFFFF',
-      fontWeight: '700',
-    },
+  container: {
+    padding: 20
+  },
+  input: {
+    height: 40,
+    backgroundColor: "rgba(255,255,255,0.2)",
+    marginBottom: 10,
+    color: "#FFF",
+    paddingHorizontal: 10
+  },
+  buttonContainer: {
+    backgroundColor: "#c0392b",
+    paddingVertical: 10,
+    marginBottom: 10
+  },
+  buttonText: {
+    textAlign: "center",
+    color: "#FFFFFF",
+    fontWeight: "700"
+  }
 });
-

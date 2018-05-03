@@ -5,20 +5,22 @@ import {
   StyleSheet,
   TouchableOpacity,
   Dimensions,
-  Alert
+  Alert,
+  ToastAndroid
 } from "react-native";
 import { StackNavigator } from "react-navigation";
 import { Button } from "react-native-elements";
 import firebase from "react-native-firebase";
 
-export default class componentName extends Component {
+export default class BetActivity extends Component {
   constructor(props) {
     super(props);
     this.ref = firebase.firestore().collection("Bets");
     this.state = {
       match: this.props.navigation.state.params,
       home_score: 0,
-      away_score: 0
+      away_score: 0,
+      user: null
     };
   }
 
@@ -60,13 +62,29 @@ export default class componentName extends Component {
     });
   };
 
+  componentDidMount() {
+    this.unsubscriber = firebase.auth().onAuthStateChanged(user => {
+      this.setState({ user });
+    });
+  }
+
+  componentWillUnmount() {
+    if (this.unsubscriber) {
+      this.unsubscriber();
+    }
+  }
+
   _placeBet = () => {
-    this.state.match.home_result = this.state.home_score;
-    this.state.match.away_result = this.state.away_score;
-    this.ref.add(this.state.match).catch(err => {
+    //Esto lo cambie porque no se recomienda meterse directaente con el estado
+    var bet = this.state.match;
+    bet.home_result = this.state.home_score;
+    bet.away_result = this.state.away_score;
+    bet.user = this.state.user.email;
+    this.ref.add(bet).catch(err => {
       console.log(err);
     });
-    Alert.alert("Bet has been placed.");
+    ToastAndroid.show("Bet Placed", ToastAndroid.SHORT);
+    this.props.navigation.pop();
   };
 
   _goBack = () => {

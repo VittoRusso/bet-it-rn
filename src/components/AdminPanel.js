@@ -13,14 +13,30 @@ export default class AdminPanel extends Component {
   constructor(props) {
     super(props);
     this.ref = firebase.firestore().collection("Matches");
+    this.ref2 = firebase.firestore().collection("Users");
     this.state = {
-      user: null
+      user: null,
+      isAdmin: false
     };
   }
 
   componentDidMount() {
     this.unsubscriber = firebase.auth().onAuthStateChanged(user => {
       this.setState({ user });
+      var adminQuery = this.ref2.where("email", "==", user.email);
+      //This implements admin super powers
+      adminQuery
+        .get()
+        .then(querySnapshot => {
+          querySnapshot.forEach(doc => {
+            this.setState({
+              isAdmin: doc.data().isAdmin
+            });
+          });
+        })
+        .catch(err => {
+          console.log(err);
+        });
     });
   }
 
@@ -84,10 +100,26 @@ export default class AdminPanel extends Component {
   }
 
   render() {
+    const loadDataButton = (
+      <TouchableOpacity
+        style={styles.buttonContainer}
+        onPress={this.onLoadData}
+      >
+        <Text style={styles.buttonText}> Load data</Text>
+      </TouchableOpacity>
+    );
+
+    const wipeDataButton = (
+      <TouchableOpacity
+        style={styles.buttonContainer}
+        onPress={this.onWipeData}
+      >
+        <Text style={styles.buttonText}> Wipe data</Text>
+      </TouchableOpacity>
+    );
     return (
       <View style={styles.container}>
         <Text>
-          {" "}
           User:
           {this.state.user ? this.state.user.email : "hola"}
         </Text>
@@ -97,18 +129,8 @@ export default class AdminPanel extends Component {
         >
           <Text style={styles.buttonText}> Sign Out</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.buttonContainer}
-          onPress={this.onLoadData}
-        >
-          <Text style={styles.buttonText}> Load data</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.buttonContainer}
-          onPress={this.onWipeData}
-        >
-          <Text style={styles.buttonText}> Wipe data</Text>
-        </TouchableOpacity>
+        {this.state.isAdmin ? loadDataButton : null}
+        {this.state.isAdmin ? wipeDataButton : null}
       </View>
     );
   }

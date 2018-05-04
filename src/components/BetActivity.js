@@ -17,7 +17,6 @@ export default class BetActivity extends Component {
     super(props);
     this.ref = firebase.firestore().collection("Bets");
     this.ref2 = firebase.firestore().collection("Users");
-    this.results_ref = firebase.firestore().collection("Results");
     this.state = {
       match: this.props.navigation.state.params,
       home_score: 0,
@@ -110,9 +109,25 @@ export default class BetActivity extends Component {
     result.away_result = this.state.away_score;
     //This is dumb but will result useful
     result.isResult = true;
-    this.results_ref.add(result).catch(err => {
-      console.log(err);
-    });
+
+    //Get the match unique ID
+    var matchquery = firebase
+      .firestore()
+      .collection("Matches")
+      .where("id", "==", result.id);
+    //Este document referencia al partido
+    var document = null;
+    matchquery
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          document = doc;
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
     ToastAndroid.show("Result Placed", ToastAndroid.SHORT);
     this.props.navigation.pop();
   };

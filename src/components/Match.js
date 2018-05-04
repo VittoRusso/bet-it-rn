@@ -34,10 +34,10 @@ export default class Match extends React.PureComponent {
               {this.props.item.home_team}
             </Text>
             <Text style={[styles.row_item_half, styles.center_align]}>
-              {this.props.item.home_score ? this.props.item.home_score : "-"}
+              {this.props.item.home_result ? this.props.item.home_result : "-"}
             </Text>
             <Text style={[styles.row_item_half, styles.center_align]}>
-              {this.props.item.away_score ? this.props.item.away_score : "-"}
+              {this.props.item.away_result ? this.props.item.away_result : "-"}
             </Text>
             <Text
               style={[styles.row_item, styles.right_align]}

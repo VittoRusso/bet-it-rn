@@ -5,6 +5,7 @@ import { Dimensions } from "react-native";
 import MatchList from "./MatchList";
 import AdminPanel from "./AdminPanel";
 import BetActivity from "./BetActivity";
+import BetList from "./BetList";
 
 export const MatchesStack = StackNavigator(
   {
@@ -26,6 +27,12 @@ export const Tabs = TabNavigator(
       screen: MatchesStack,
       navigationOptions: {
         tabBarLabel: "Matches"
+      }
+    },
+    Bets: {
+      screen: BetList,
+      navigationOptions: {
+        tabBarLabel: "Bets"
       }
     },
     Panel: {

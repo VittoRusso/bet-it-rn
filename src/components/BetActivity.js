@@ -17,10 +17,13 @@ export default class BetActivity extends Component {
     super(props);
     this.ref = firebase.firestore().collection("Bets");
     this.ref2 = firebase.firestore().collection("Users");
+    let home_score = this.props.navigation.state.params.home_result;
+    let away_score = this.props.navigation.state.params.away_result;
+
     this.state = {
       match: this.props.navigation.state.params,
-      home_score: 0,
-      away_score: 0,
+      home_score: home_score ? home_score : 0,
+      away_score: away_score ? away_score : 0,
       user: null,
       isAdmin: false
     };

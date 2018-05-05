@@ -19,8 +19,8 @@ export default class MatchList extends React.PureComponent {
     this.state = {
       loading: true,
       matches: [],
-      groups: [], 
-      user = null
+      groups: [],
+      user: null
     };
     //Explicit binding the method to THIS SPECIFIC CLASS and not where is called (Match.js)
     this.OpenPlaceBetActivity = this.OpenPlaceBetActivity.bind(this);
@@ -28,9 +28,15 @@ export default class MatchList extends React.PureComponent {
 
   componentDidMount() {
     this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
+    this.unsubscriber = firebase.auth().onAuthStateChanged(user => {
+      this.setState({
+        user
+      });
+    });
   }
   componentWillUnmount() {
     this.unsubscribe();
+    this.unsubscriber();
   }
 
   onCollectionUpdate = querySnapshot => {
@@ -41,7 +47,8 @@ export default class MatchList extends React.PureComponent {
       let currentMatch = doc.data();
       //Saves the unique database identifier
       currentMatch._uid = doc.id;
-      currentMatch.isMine = true;
+      //This makes "my bets" to display bluish and the rest to display yellowish
+      currentMatch.isMine = currentMatch.user == this.state.user.email;
       matches.push(currentMatch);
       dates.push(doc.data().date);
     });
@@ -65,7 +72,7 @@ export default class MatchList extends React.PureComponent {
   };
 
   OpenPlaceBetActivity() {
-    Alert.alert('papike');
+    console.log(this.state.user.email);
   }
 
   _renderSeparator = () => {

@@ -39,7 +39,10 @@ export default class MatchList extends React.PureComponent {
     var dates = [];
 
     querySnapshot.forEach(doc => {
-      matches.push(doc.data());
+      let currentMatch = doc.data();
+      //Saves the unique database identifier
+      currentMatch._uid = doc.id;
+      matches.push(currentMatch);
       dates.push(doc.data().date);
     });
 

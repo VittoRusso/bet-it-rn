@@ -19,7 +19,13 @@ export default class Match extends React.PureComponent {
   render() {
     return (
       <TouchableOpacity onPress={this.onPress}>
-        <View style={styles.container}>
+        <View
+          style={
+            this.props.item.isResult
+              ? styles.bluish_container
+              : styles.container
+          }
+        >
           <View style={styles.row_one}>
             <Image
               style={styles.flag_image}
@@ -34,10 +40,10 @@ export default class Match extends React.PureComponent {
               {this.props.item.home_team}
             </Text>
             <Text style={[styles.row_item_half, styles.center_align]}>
-              {this.props.item.home_result ? this.props.item.home_result : "-"}
+              {this.props.item.home_result ? this.props.item.home_result : 0}
             </Text>
             <Text style={[styles.row_item_half, styles.center_align]}>
-              {this.props.item.away_result ? this.props.item.away_result : "-"}
+              {this.props.item.away_result ? this.props.item.away_result : 0}
             </Text>
             <Text
               style={[styles.row_item, styles.right_align]}
@@ -68,6 +74,13 @@ const styles = StyleSheet.create({
     height: 72,
     paddingHorizontal: 16,
     justifyContent: "center"
+  },
+  bluish_container: {
+    flex: 1,
+    height: 72,
+    paddingHorizontal: 16,
+    justifyContent: "center",
+    backgroundColor: "rgba(52, 152, 219,0.2)"
   },
   row_item: {
     flex: 1,

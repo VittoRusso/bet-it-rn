@@ -66,7 +66,9 @@ export default class BetActivity extends Component {
 
   componentDidMount() {
     this.unsubscriber = firebase.auth().onAuthStateChanged(user => {
-      this.setState({ user });
+      this.setState({
+        user
+      });
       var adminQuery = this.ref2.where("email", "==", user.email);
       //This implements admin super powers
       adminQuery
@@ -91,7 +93,7 @@ export default class BetActivity extends Component {
   }
 
   _placeBet = () => {
-    //Esto lo cambie porque no se recomienda meterse directaente con el estado
+    //Esto lo cambie porque no se recomienda meterse directamente con el estado
     var bet = this.state.match;
     bet.home_result = this.state.home_score;
     bet.away_result = this.state.away_score;
@@ -104,29 +106,22 @@ export default class BetActivity extends Component {
   };
 
   _placeResult = () => {
-    var result = this.state.match;
-    result.home_result = this.state.home_score;
-    result.away_result = this.state.away_score;
-    //This is dumb but will result useful
-    result.isResult = true;
-
     //Get the match unique ID
-    var matchquery = firebase
+    const match = this.state.match;
+    console.log(match._uid);
+    const match_ref = firebase
       .firestore()
       .collection("Matches")
-      .where("id", "==", result.id);
-    //Este document referencia al partido
-    var document = null;
-    matchquery
-      .get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(doc => {
-          document = doc;
-        });
-      })
-      .catch(err => {
-        console.log(err);
-      });
+      .doc(match._uid);
+    const data = {
+      home_result: this.state.home_score,
+      away_result: this.state.away_score,
+      isResult: true
+    };
+    console.log("got here");
+    match_ref.update(data).then(() => {
+      console.log("Data updated");
+    });
 
     ToastAndroid.show("Result Placed", ToastAndroid.SHORT);
     this.props.navigation.pop();
@@ -147,6 +142,7 @@ export default class BetActivity extends Component {
         </Text>
       </TouchableOpacity>
     );
+
     return (
       <View style={styles.container}>
         <View style={styles.container}>

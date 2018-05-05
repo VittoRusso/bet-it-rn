@@ -17,8 +17,10 @@ export default class BetActivity extends Component {
     super(props);
     this.ref = firebase.firestore().collection("Bets");
     this.ref2 = firebase.firestore().collection("Users");
-    let home_score = this.props.navigation.state.params.home_result;
-    let away_score = this.props.navigation.state.params.away_result;
+    var home_score = this.props.navigation.state.params.home_result;
+    console.log(home_score);
+    var away_score = this.props.navigation.state.params.away_result;
+    console.log(away_score);
 
     this.state = {
       match: this.props.navigation.state.params,
@@ -96,16 +98,21 @@ export default class BetActivity extends Component {
   }
 
   _placeBet = () => {
-    //Esto lo cambie porque no se recomienda meterse directamente con el estado
-    var bet = this.state.match;
-    bet.home_result = this.state.home_score;
-    bet.away_result = this.state.away_score;
-    bet.user = this.state.user.email;
-    this.ref.add(bet).catch(err => {
-      console.log(err);
-    });
-    ToastAndroid.show("Bet Placed", ToastAndroid.SHORT);
-    this.props.navigation.pop();
+    if (this.state.match.isResult) {
+      Alert.alert("You cannot bet on a result");
+      this.props.navigation.pop();
+    } else {
+      //Esto lo cambie porque no se recomienda meterse directamente con el estado
+      var bet = this.state.match;
+      bet.home_result = this.state.home_score;
+      bet.away_result = this.state.away_score;
+      bet.user = this.state.user.email;
+      this.ref.add(bet).catch(err => {
+        console.log(err);
+      });
+      ToastAndroid.show("Bet Placed", ToastAndroid.SHORT);
+      this.props.navigation.pop();
+    }
   };
 
   _placeResult = () => {

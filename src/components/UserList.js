@@ -56,6 +56,9 @@ export default class UserList extends React.PureComponent {
       }
     });
     this.setState({ matches });
+    this.users_ref.get().then(snapshot => {
+      this.onUsersUpdate(snapshot);
+    });
   };
 
   onBetsUpdate = querySnapshot => {

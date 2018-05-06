@@ -6,6 +6,7 @@ import MatchList from "./MatchList";
 import AdminPanel from "./AdminPanel";
 import BetActivity from "./BetActivity";
 import BetList from "./BetList";
+import UserList from "./UserList";
 
 export const MatchesStack = StackNavigator(
   {
@@ -33,6 +34,12 @@ export const Tabs = TabNavigator(
       screen: BetList,
       navigationOptions: {
         tabBarLabel: "Bets"
+      }
+    },
+    Users: {
+      screen: UserList,
+      navigationOptions: {
+        tabBarLabel: "Users"
       }
     },
     Panel: {

@@ -212,7 +212,6 @@ export default class BetActivity extends Component {
 
         <View style={styles.container}>
           <Text style={styles.title}> {this.state.match.date} </Text>
-
           <Text style={styles.title}> {this.state.match.stadium} </Text>
           <View style={styles.statsContainer}>
             <Text style={styles.stats}>

@@ -141,10 +141,14 @@ export default class BetActivity extends Component {
     this.props.navigation.pop();
   };
 
+  getBetCountObject = () => {
+    return { home_wins: 1, tie: 2, away_wins: 3 };
+  };
+
   render() {
     const placeBetButton = (
       <TouchableOpacity
-        style={styles.button}
+        style={[styles.button, styles.controlHeight]}
         onPress={this.state.isAdmin ? this._placeResult : this._placeBet}
       >
         <Text style={styles.button_text2}>
@@ -152,7 +156,16 @@ export default class BetActivity extends Component {
         </Text>
       </TouchableOpacity>
     );
+    const goBackButton = (
+      <TouchableOpacity
+        style={[styles.button, styles.controlHeight]}
+        onPress={this._goBack}
+      >
+        <Text style={styles.button_text2}>GO BACK</Text>
+      </TouchableOpacity>
+    );
 
+    const betCount = this.getBetCountObject();
     return (
       <View style={styles.container}>
         <View style={styles.container}>
@@ -201,13 +214,18 @@ export default class BetActivity extends Component {
           <Text style={styles.title}> {this.state.match.date} </Text>
 
           <Text style={styles.title}> {this.state.match.stadium} </Text>
-
-          <View style={styles.row}>{placeBetButton}</View>
-
+          <View style={styles.statsContainer}>
+            <Text style={styles.stats}>
+              Bets on home win: {betCount.home_wins}
+            </Text>
+            <Text style={styles.stats}>Bets on tie: {betCount.tie} </Text>
+            <Text style={styles.stats}>
+              Bets on away win: {betCount.away_wins}{" "}
+            </Text>
+          </View>
           <View style={styles.row}>
-            <TouchableOpacity style={styles.button} onPress={this._goBack}>
-              <Text style={styles.button_text2}>GO BACK</Text>
-            </TouchableOpacity>
+            {placeBetButton}
+            {goBackButton}
           </View>
         </View>
       </View>
@@ -221,10 +239,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
     marginTop: 20,
-    paddingHorizontal: 16
+    paddingHorizontal: 16,
+    marginBottom: 20
   },
   title: {
-    fontSize: 24,
+    fontSize: 20,
     color: "#000000",
     textAlign: "center",
     flex: 1
@@ -251,7 +270,8 @@ const styles = StyleSheet.create({
     opacity: 0.75,
     alignItems: "center",
     justifyContent: "center",
-    margin: 2
+    margin: 2,
+    borderRadius: 4
   },
   button_text: {
     color: "white",
@@ -261,5 +281,21 @@ const styles = StyleSheet.create({
   button_text2: {
     color: "white",
     fontSize: 24
+  },
+  controlHeight: {
+    height: 72
+  },
+  statsContainer: {
+    width: Dimensions.get("window").width - 32,
+    height: 100,
+    // borderWidth: 2,
+    // borderColor: "rgba(0,0,0,1.0)",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    marginBottom: 10
+  },
+  stats: {
+    fontSize: 16,
+    color: "rgba(20,20,20,1.0)"
   }
 });

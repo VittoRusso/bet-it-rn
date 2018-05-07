@@ -44,6 +44,10 @@ export default class UserList extends React.PureComponent {
       currentUser.score = this.getPoints(currentUser.email);
       users.push(currentUser);
     });
+    users.sort(function(a, b) {
+      return b.score - a.score;
+    });
+
     this.setState({ users });
   };
 

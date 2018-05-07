@@ -18,16 +18,20 @@ export default class BetActivity extends Component {
     this.ref = firebase.firestore().collection("Bets");
     this.ref2 = firebase.firestore().collection("Users");
     var home_score = this.props.navigation.state.params.home_result;
-    console.log(home_score);
     var away_score = this.props.navigation.state.params.away_result;
-    console.log(away_score);
 
     this.state = {
       match: this.props.navigation.state.params,
       home_score: home_score ? home_score : 0,
       away_score: away_score ? away_score : 0,
       user: null,
-      isAdmin: false
+      isAdmin: false,
+      home_wins: 0,
+      away_wins: 0,
+      tie: 0,
+      perfect_bets: 0,
+      ok_bets: 0,
+      sad_bets: 0
     };
   }
 
@@ -70,6 +74,7 @@ export default class BetActivity extends Component {
   };
 
   componentDidMount() {
+    this.mounted = true;
     this.unsubscriber = firebase.auth().onAuthStateChanged(user => {
       this.setState({
         user
@@ -89,12 +94,18 @@ export default class BetActivity extends Component {
           console.log(err);
         });
     });
+    if (this.state.match.isResult) {
+      this.getResultsCount();
+    } else {
+      this.getBetCount();
+    }
   }
 
   componentWillUnmount() {
     if (this.unsubscriber) {
       this.unsubscriber();
     }
+    this.mounted = false;
   }
 
   _placeBet = () => {
@@ -102,7 +113,6 @@ export default class BetActivity extends Component {
       Alert.alert("You cannot bet on a result");
       this.props.navigation.pop();
     } else {
-      //Esto lo cambie porque no se recomienda meterse directamente con el estado
       var bet = this.state.match;
       bet.home_result = this.state.home_score;
       bet.away_result = this.state.away_score;
@@ -141,8 +151,55 @@ export default class BetActivity extends Component {
     this.props.navigation.pop();
   };
 
-  getBetCountObject = () => {
-    return { home_wins: 1, tie: 2, away_wins: 3 };
+  getBetCount = () => {
+    var betQuery = firebase
+      .firestore()
+      .collection("Bets")
+      .where("name", "==", this.state.match.name);
+    var myBets = [];
+    betQuery.get().then(querySnapshot => {
+      querySnapshot.forEach(doc => {
+        myBets.push(doc.data());
+      });
+      var home_wins = myBets.filter(x => x.home_result > x.away_result).length;
+      var away_wins = myBets.filter(x => x.away_result > x.home_result).length;
+      var tie = myBets.filter(x => x.home_result == x.away_result).length;
+      this.setState({
+        home_wins,
+        away_wins,
+        tie
+      });
+    });
+  };
+
+  getResultsCount = () => {
+    var betQuery = firebase
+      .firestore()
+      .collection("Bets")
+      .where("name", "==", this.state.match.name);
+    var myBets = [];
+    betQuery.get().then(querySnapshot => {
+      querySnapshot.forEach(doc => {
+        myBets.push(doc.data());
+      });
+      console.log(myBets);
+      var home_score = this.state.home_score;
+      var away_score = this.state.away_score;
+      var perfect_bets = myBets.filter(
+        x => x.home_result == home_score && x.away_result == away_score
+      ).length;
+
+      //Esta es una de las vainas mas obscenas que he hecho mk sorry
+      var ok_bets =
+        myBets.filter(
+          x =>
+            (x.home_result > x.away_result && home_score > away_score) ||
+            (x.home_result < x.away_result && home_score < away_score) ||
+            (x.home_result == x.away_result && home_score == away_score)
+        ).length - perfect_bets;
+      var sad_bets = myBets.length - perfect_bets - ok_bets;
+      this.setState({ perfect_bets, ok_bets, sad_bets });
+    });
   };
 
   render() {
@@ -165,7 +222,30 @@ export default class BetActivity extends Component {
       </TouchableOpacity>
     );
 
-    const betCount = this.getBetCountObject();
+    const betStats = (
+      <View style={styles.statsContainer}>
+        <Text style={styles.stats}>
+          Bets on home win: {this.state.home_wins}
+        </Text>
+        <Text style={styles.stats}>Bets on tie: {this.state.tie} </Text>
+        <Text style={styles.stats}>
+          Bets on away win: {this.state.away_wins}
+        </Text>
+      </View>
+    );
+
+    const resultStats = (
+      <View style={styles.statsContainer}>
+        <Text style={styles.stats}>
+          Perfect bets (3 pts.): {this.state.perfect_bets}
+        </Text>
+        <Text style={styles.stats}>Ok bets (1 pt.): {this.state.ok_bets} </Text>
+        <Text style={styles.stats}>
+          Sad bets (0 pts.): {this.state.sad_bets}
+        </Text>
+      </View>
+    );
+
     return (
       <View style={styles.container}>
         <View style={styles.container}>
@@ -213,15 +293,7 @@ export default class BetActivity extends Component {
         <View style={styles.container}>
           <Text style={styles.title}> {this.state.match.date} </Text>
           <Text style={styles.title}> {this.state.match.stadium} </Text>
-          <View style={styles.statsContainer}>
-            <Text style={styles.stats}>
-              Bets on home win: {betCount.home_wins}
-            </Text>
-            <Text style={styles.stats}>Bets on tie: {betCount.tie} </Text>
-            <Text style={styles.stats}>
-              Bets on away win: {betCount.away_wins}{" "}
-            </Text>
-          </View>
+          {this.state.match.isResult ? resultStats : betStats}
           <View style={styles.row}>
             {placeBetButton}
             {goBackButton}
